@@ -3,11 +3,20 @@
 #include <signal.h>
 #include <stdlib.h>
 
+/*
+
+Realizar un programa que capture la señal de alarma, de manera que imprima la cadena “RING”
+pasados 5 segundos, después pasados otros 3 segundos y por último cada segundo. Implementar
+esto último, utilizando un bucle infinito que vaya imprimiendo el número de timbrazos. Pasados 4
+timbrazos, el proceso se debe parar utilizando para ello la función kill().
+
+*/
+
 void primerManejador(int sig);
 void segundoManejador(int sig);
 void ultimoManejador(int sig);
 
-int main ()
+int main()
 {
     signal(SIGALRM, primerManejador);
 
@@ -33,10 +42,10 @@ void segundoManejador(int sig)
     cont++;
 
     printf("RING\n");
-    
+
     if (cont >= 3)
     {
-        signal(SIGALRM, ultimoManejador);    
+        signal(SIGALRM, ultimoManejador);
     }
 
     alarm(1);

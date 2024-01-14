@@ -6,7 +6,15 @@
 #include <errno.h>
 #include <string.h>
 
-int main (int argc, char **argv)
+/*
+
+Realice el mismo ejercicio que en el apartado anterior, pero esta vez atendiendo al esquema que
+muestra la siguiente figura. Los hijos deben mostrar también su ID y el de su padre, al igual que en
+el ejercicio 1:
+
+*/
+
+int main(int argc, char **argv)
 {
     if (argc != 2)
     {
@@ -31,36 +39,35 @@ int main (int argc, char **argv)
 
         else if (pid == 0)
         {
-            printf("[hijo %d] --> %ld, [padre %d] --> %ld\n", i+1, (long int)getpid(), i,(long int)getppid());
+            printf("[hijo %d] --> %ld, [padre %d] --> %ld\n", i + 1, (long int)getpid(), i, (long int)getppid());
         }
-        
+
         else
         {
-            //espera
-            //printf("[PADRE] ---> %ld\n", (long int)getpid());
-            while((flag=wait(&status))>0)
+            // espera
+            // printf("[PADRE] ---> %ld\n", (long int)getpid());
+            while ((flag = wait(&status)) > 0)
             {
-                if(WIFEXITED(status))
+                if (WIFEXITED(status))
                 {
-                    printf("\nhijo %ld finalizado con status %d\n",(long int)flag,WEXITSTATUS(status));
+                    printf("\nhijo %ld finalizado con status %d\n", (long int)flag, WEXITSTATUS(status));
                 }
-                else if(WIFSIGNALED(status))
+                else if (WIFSIGNALED(status))
                 {
-                    printf("hijo %ld finalizado tras recibir una senal con status %d\n",(long int)flag,WTERMSIG(status));
+                    printf("hijo %ld finalizado tras recibir una senal con status %d\n", (long int)flag, WTERMSIG(status));
                 }
-                else if(WIFSTOPPED(status))
+                else if (WIFSTOPPED(status))
                 {
-                    printf("hijo %ld parado con status %d\n",(long int)flag,WSTOPSIG(status));
+                    printf("hijo %ld parado con status %d\n", (long int)flag, WSTOPSIG(status));
                 }
-                else if(WIFCONTINUED(status))
+                else if (WIFCONTINUED(status))
                 {
-                    printf("hijo %ld reanudado\n",(long int)flag);
+                    printf("hijo %ld reanudado\n", (long int)flag);
                 }
-
             }
-            if(flag==(pid_t)-1 && errno==ECHILD)
-            { 
-                printf("Valor del errno= %d, definido como %s\n",errno,strerror(errno));
+            if (flag == (pid_t)-1 && errno == ECHILD)
+            {
+                printf("Valor del errno= %d, definido como %s\n", errno, strerror(errno));
             }
             else
             {

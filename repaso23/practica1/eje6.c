@@ -8,18 +8,18 @@
 
 /*
 
-Implemente un programa que pidiendo un número de procesos totales N por línea de argumentos
-cree las siguientes jerarquías de procesos en abanico (los procesos ejecutan en paralelo):
+Use el ejercicio 1a) y cree una variable global de tipo entero inicializada a 0. Haga que cada hijo
+aumente en uno el valor de esa variable global y que el padre imprima el resultado final. ¿Qué
+ocurre?
 
-Cada proceso hijo mostrará por salida estándar un mensaje incluyendo su ID y el de su padre, y
-finalizará su ejecución con código de salida 0 (recuerde que esto es simplemente hacer un exit(0),
-return(0) o exit(EXIT_SUCCESS)).
-
-El padre esperará para recoger a sus hijos a su finalización e imprimirá un mensaje indicando la
-finalización de cada hijo y su status, y terminará con código 0. Utilice macros como
-EXIT_FAILURE, WEXITSTATUS, etc.
+Correcto, su valor no se modifica porque los hijos son procesos nuevos que no comparten
+memoria. Para ello, y concretamente en sistemas basados en POSIX, se utilizan métodos de
+intercomunicación de procesos como son memoria compartida y semáforos, los cuales se estudiarán
+en otra práctica de la asignatura.
 
 */
+
+int global = 0;
 
 int main(int argc, char **argv)
 {
@@ -47,6 +47,7 @@ int main(int argc, char **argv)
             break;
         case 0:
             printf("[hijo %d] --> pid: %ld y [padre] --> pid: %ld\n", i + 1, (long int)getpid(), (long int)getppid());
+            global++;
             exit(EXIT_SUCCESS);
             break;
         default:
@@ -54,7 +55,7 @@ int main(int argc, char **argv)
         }
     }
 
-    printf("[PADRE] ---> %ld\n", (long int)getpid());
+    printf("[PADRE] ---> %ld y variable global: %d\n", (long int)getpid(), global);
     while ((flag = wait(&status)) > 0)
     {
         if (WIFEXITED(status))
